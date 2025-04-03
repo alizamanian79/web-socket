@@ -1,113 +1,118 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+// WebSocketChat.tsx
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
-export default function Home() {
+const WebSocketChat = () => {
+
+const router = useRouter();
+const {roomId} = router.query;
+const [title, setTitle] = useState("Welcome to My Web Socket ! please choose which one you want")
+const [mode, setMode] = useState<any>(undefined);
+const [name, setName] = useState<string | undefined>(undefined)
+const [status, setStatus] = useState<any>(undefined)
+const [id, setId] = useState<any>(roomId || "")
+
+  const [randomNumber, setRandomNumber] = useState<any>(undefined);
+
+  const generateRandomNumber = () => {
+    const randomNum = Math.floor(Math.random() * 1000000); // generates a number between 0 and 1
+    setRandomNumber(`${randomNum}`);
+    return randomNum
+  };
+
+const handleJoin = ()=>{
+   
+  switch (status) {
+    case "joinRoom":
+       if (!id || !name) {
+    alert("لطفاً تمامی فیلدها را پر کنید.");
+    return;
+  }
+      router.push(`/chatroom/${roomId?roomId:id}?name=${name}`)
+      break;
+
+      case "createRoom":
+         if (!name) {
+    alert("لطفاً تمامی فیلدها را پر کنید.");
+    return;
+  }
+       router.push(`/chatroom/${randomNumber}?name=${name}`)
+      break;
+  
+    default:
+      break;
+  }
+}
+
+
+useEffect(() => {
+  if (roomId !== undefined) {
+    setTitle("Enter your name: ");
+    setStatus("joinRoom");
+    setMode("getName");
+  }
+}, [roomId]); // This will run every time roomId changes
+
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <div className="flex justify-center items-center w-[100%] h-[100vh] bg-[white] flex-col">
+      {mode === undefined && (
+        <>
+
+          <div className="w-[100%] md:w-[50%] h-[auto] flex flex-wrap justify-center items-center">
+    <h1 className="w-[95%] mb-[4rem] text-center text-black font-bold">{title}</h1>
+
+    <div className="flex w-[95%] justify-between">
+    <button className="w-[47%] h-[150px] bg-[#ffffff] shadow-2xl text-[black] rounded-2xl  cursor-pointer" onClick={()=>{
+        setTitle( "Write your name : ")
+      setMode("getName")
+      var room =generateRandomNumber()
+      setId(room)
+
+      setStatus("createRoom")
+
+   } }>Create chatroom</button>
+   
+    <button className="w-[47%] h-[150px] bg-[#ffffff] shadow-2xl text-[black] rounded-2xl  cursor-pointer" onClick={()=>{
+      setTitle("Filling the requirements")
+      setMode("getName")
+      setStatus("joinRoom")
+// router.push("/chatroom?roomId=")}
+    }}>Join chatroom</button>
+    </div>
+    
+    </div>
+      </>)}
+
+         {mode === "getName" && (
+        <>
+           <div className="w-[100%] md:w-[50%] h-[auto] flex flex-col justify-center items-center">
+           <h1 className="w-[90%] my-[2rem] text-center text-black">{title}</h1>
+          {roomId || id ? <></>:<>
+          
+          <input required className="w-[50%] rounded-[2px] bg-[#f1f1f1] text-black p-[5px] h-[55px] outline-none" type="name" name="" placeholder="Room id here ..." value={id} onChange={(e)=>setId(e.target.value)} id="" /> 
+         <br />
+          </>}
+          <input required className="w-[50%] rounded-[2px] bg-[#f1f1f1] text-black p-[5px] h-[55px] outline-none" type="name" name="" placeholder="first name here ..." value={name} onChange={(e)=>setName(e.target.value)} id="" />
+         
+         <div className="flex justify-between w-[50%]">
+       <button className="mt-[1rem] w-[47%] bg-blue-600 text-white h-[48px] rounded-2xl cursor-pointer" onClick={handleJoin}>Join</button>
+                    <button className="mt-[1rem] w-[47%] bg-red-500 text-white h-[48px] rounded-2xl cursor-pointer" onClick={()=>{
+                      setTitle("Welcome to My Web Socket ! please choose which one you want")
+                      setMode(undefined)
+                      setId(undefined)
+                      router.push(`${process.env.NEXT_PUBLIC_API_CLIENT}/`)}}>back</button>
+         </div>
+
+     
+   
+          </div>
+        </>)}
+  <p className="text-[13px] mt-[4rem] text-black">Created By Ali Zamanian</p>
     </div>
   );
-}
+};
+
+export default WebSocketChat;
