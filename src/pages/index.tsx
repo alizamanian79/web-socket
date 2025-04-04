@@ -26,11 +26,8 @@ const handleJoin = ()=>{
    
   switch (status) {
     case "joinRoom":
-       if (!id || !name) {
-    alert("لطفاً تمامی فیلدها را پر کنید.");
-    return;
-  }
-      router.push(`/chatroom/${roomId?roomId:id}?name=${name}`)
+       
+      router.push(`/chatroom?room=${roomId?roomId:id}&name=${name}`)
       break;
 
       case "createRoom":
@@ -38,7 +35,7 @@ const handleJoin = ()=>{
     alert("لطفاً تمامی فیلدها را پر کنید.");
     return;
   }
-       router.push(`/chatroom/${randomNumber}?name=${name}`)
+       router.push(`/chatroom?room=${randomNumber}&name=${name}`)
       break;
   
     default:
