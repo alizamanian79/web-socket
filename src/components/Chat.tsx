@@ -165,9 +165,9 @@ const Chat: React.FC<ChatInterface> = ({ id, name }) => {
          placeholder:text-[#9a9a9a] text-black w-[83%] md:w-[93%] h-[45px] outline-0 rounded-2xl"
         placeholder="Type a message..."
       />
-      <button onClick={handleSend} className="bg-[#fdfef6] h-[45px] w-[45px] flex justify-center items-center
+      <button onClick={handleSend} className="bg-[#fdfef6] h-[45px] w-[45px] flex justify-center items-center cursor-pointer
         rounded-[50%]">
-        <FaLocationArrow className="text-[#5846d1] text-[19px]"/>
+        <FaLocationArrow className="text-[#5846d1] text-[19px] cursor-pointer"/>
       </button>
 
       </div>
